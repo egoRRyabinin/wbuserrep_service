@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Определитель спама</title>
+</head>
+<body>
+    <h2>Определитель спама</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="image[]" accept="image/jpeg" multiple>
+        <select id="serviceSelect">
+            <option value="clip_cb">Service 1</option>
+            <option value="easyocr_cb">Service 2</option>
+<!--            <option value="metamodel">Service 3</option>-->
+        </select>
+        <button type="button" onclick="uploadImage()">Upload</button>
+    </form>
+    <div id="predictions"></div>
+
+    <script>
+        function uploadImage() {
+            var formData = new FormData(document.getElementById('uploadForm'));
+            var selectorValue = document.getElementById("serviceSelect").value;
+
+            fetch('/upload', {
+                method: 'POST',
+                headers: {
+                    "selector": selectorValue
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayPredictions(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function displayPredictions(data) {
+            var predictions = document.getElementById('predictions');
+            predictions.innerHTML = ''; // Очищаем предыдущие прогнозы
+            data.forEach(pred => {
+                var predElement = document.createElement('div');
+                predElement.innerHTML = 'Confidence: ' + pred.confidence.toFixed(2) + ', Spam: ' + pred.spam;
+                predictions.appendChild(predElement);
+            });
+        }
+    </script>
+</body>
+</html>
