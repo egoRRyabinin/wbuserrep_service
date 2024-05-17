@@ -1,5 +1,5 @@
 Инструкция по запуску:
-1. клонировать репозиторий git clone 
+1. клонировать репозиторий git clone https://github.com/egoRRyabinin/wbuserrep_service.git
 1. в корневой папке проекта выполнить следующие команды:
  - docker compose build
  - docker compose up -d
