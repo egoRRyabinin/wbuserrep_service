@@ -11,10 +11,11 @@ services:
     depends_on:
       - clipcb_app
       - easyocr_app
+      - metamodel_app
 
   clipcb_app:
     build: ./services/clipcb_app
-    command: gunicorn --bind 0.0.0.0:5001 clipcb:app
+    command: gunicorn --timeout 120 --bind 0.0.0.0:5001 clipcb:app
     ports:
       - "5001:5001"
     networks:
@@ -22,19 +23,19 @@ services:
 
   easyocr_app:
     build: ./services/easyocrcb_app
-    command: gunicorn --bind 0.0.0.0:5002 easyocrcb:app
+    command: gunicorn --timeout 120 --bind 0.0.0.0:5002 easyocrcb:app
     ports:
       - "5002:5002"
     networks:
       - my_network
-#
-#  metamodel_app:
-#    build: ./services/metamodel_app
-#    command: gunicorn --bind 0.0.0.0:5003 metamodel:app
-#    ports:
-#      - "5003:5003"
-#    networks:
-#      - my_network
+
+  metamodel_app:
+    build: ./services/metamodel_app
+    command: gunicorn --timeout 120 --bind 0.0.0.0:5003 metamodel:app
+    ports:
+      - "5003:5003"
+    networks:
+      - my_network
 
 networks:
   my_network:
